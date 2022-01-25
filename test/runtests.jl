@@ -12,4 +12,5 @@ using Test
     @show GitHubActionsUtils.branch_name()
     @show GitHubActionsUtils.is_tag()
     @show GitHubActionsUtils.tag_name()
+    @show GitHubActionsUtils.pull_request_number()
 end

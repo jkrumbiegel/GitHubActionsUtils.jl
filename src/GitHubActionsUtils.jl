@@ -10,9 +10,9 @@ is_push() = event_name() == "push"
 is_pull_request() = event_name() == "pull_request"
 head_ref() = something(get_env("GITHUB_HEAD_REF"))
 github_ref() = something(get_env("GITHUB_REF"))
-is_branch() = something(get_env("GITHUB_REF_TYPE")) == "branch"
+is_branch() = match(r"^refs/heads/(.*)", github_ref()) !== nothing
 branch_name() = is_branch() ? match(r"^refs/heads/(.*)", github_ref())[1] : nothing
-is_tag() = something(get_env("GITHUB_REF_TYPE")) == "tag"
+is_tag() = match(r"^refs/tags/(.*)", github_ref()) !== nothing
 tag_name() = is_tag() ? match(r"^refs/tags/(.*)", github_ref())[1] : nothing
-
+pull_request_number() = is_pull_request() ? parse(Int, match(r"^refs/pull/(\d+)/.*", github_ref())[1]) : nothing
 end
