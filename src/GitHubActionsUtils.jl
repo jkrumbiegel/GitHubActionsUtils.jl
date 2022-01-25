@@ -30,7 +30,7 @@ function auth()
 end
 
 function comment_on_pr(pr_id, comment)
-    create_comment(repository(), pr_id; auth = auth(), params = :body => comment)
+    GitHub.create_comment(repository(), pr_id; auth = auth(), params = :body => comment)
 end
 
 end
