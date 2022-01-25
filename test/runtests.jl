@@ -14,4 +14,13 @@ using Test
     @show GitHubActionsUtils.tag_name()
     @show GitHubActionsUtils.pull_request_number()
     @show GitHubActionsUtils.pull_request_source()
+    @show GitHubActionsUtils.repository()
+
+    if GitHubActionsUtils.is_pull_request()
+        pr_number = GitHubActionsUtils.pull_request_number()
+        GitHubActionsUtils.comment_on_pr(
+            pr_number,
+            "This comment is auto-generated from a CI run with version $VERSION."
+        )
+    end
 end

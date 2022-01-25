@@ -1,5 +1,7 @@
 module GitHubActionsUtils
 
+import GitHub
+
 function get_env(x)
     get(ENV, x, nothing)
 end
@@ -16,4 +18,19 @@ is_tag() = match(r"^refs/tags/(.*)", github_ref()) !== nothing
 tag_name() = is_tag() ? match(r"^refs/tags/(.*)", github_ref())[1] : nothing
 pull_request_number() = is_pull_request() ? parse(Int, match(r"^refs/pull/(\d+)/.*", github_ref())[1]) : nothing
 pull_request_source() = is_pull_request() ? head_ref() : nothing
+repository() = something(get_env("GITHUB_REPOSITORY"))
+
+const _auth = Ref{Any}()
+
+function auth()
+    if !isassigned(_auth)
+        _auth = GitHub.authenticate(ENV["GITHUB_TOKEN"])
+    end
+    return _auth[]
+end
+
+function comment_on_pr(pr_id, comment)
+    create_comment(repository(), pr_id; auth = auth(), params = :body => comment)
+end
+
 end
