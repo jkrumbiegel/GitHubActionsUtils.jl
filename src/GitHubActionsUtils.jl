@@ -24,7 +24,7 @@ const _auth = Ref{Any}()
 
 function auth()
     if !isassigned(_auth)
-        _auth = GitHub.authenticate(ENV["GITHUB_TOKEN"])
+        _auth[] = GitHub.authenticate(ENV["GITHUB_TOKEN"])
     end
     return _auth[]
 end
