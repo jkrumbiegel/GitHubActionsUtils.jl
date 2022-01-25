@@ -6,6 +6,8 @@ end
 
 is_github_actions() = get_env("CI") == "true" && get_env("GITHUB_ACTIONS") == "true"
 event_name() = something(get_env("GITHUB_EVENT_NAME"))
+is_push() = event_name() == "push"
+is_pull_request() = event_name() == "pull_request"
 head_ref() = something(get_env("GITHUB_HEAD_REF"))
 github_ref() = something(get_env("GITHUB_REF"))
 is_branch() = something(get_env("GITHUB_REF_TYPE")) == "branch"
