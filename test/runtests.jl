@@ -13,4 +13,5 @@ using Test
     @show GitHubActionsUtils.is_tag()
     @show GitHubActionsUtils.tag_name()
     @show GitHubActionsUtils.pull_request_number()
+    @show GitHubActionsUtils.pull_request_source()
 end

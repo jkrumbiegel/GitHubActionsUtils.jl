@@ -15,4 +15,5 @@ branch_name() = is_branch() ? match(r"^refs/heads/(.*)", github_ref())[1] : noth
 is_tag() = match(r"^refs/tags/(.*)", github_ref()) !== nothing
 tag_name() = is_tag() ? match(r"^refs/tags/(.*)", github_ref())[1] : nothing
 pull_request_number() = is_pull_request() ? parse(Int, match(r"^refs/pull/(\d+)/.*", github_ref())[1]) : nothing
+pull_request_source() = is_pull_request() ? head_ref() : nothing
 end
