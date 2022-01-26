@@ -47,7 +47,7 @@ function switch_to_or_create_branch(branch; orphan = false)
     end
 end
 
-push_git_branch(branch; remote = "origin") = run(`git push $origin $branch`)
+push_git_branch(branch; remote = "origin") = run(`git push $remote $branch`)
 
 function set_github_actions_bot_as_git_user()
     bot_address = "41898282+github-actions[bot]@users.noreply.github.com"
