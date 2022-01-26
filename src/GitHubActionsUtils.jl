@@ -33,4 +33,14 @@ function comment_on_pr(pr_id, comment)
     GitHub.create_comment(repository(), pr_id; auth = auth(), params = :body => comment)
 end
 
+is_git_branch(branch) = success(`git show-ref refs/heads/$branch`)
+
+function make_or_switch_to_orphan_branch(branch)
+    if is_git_branch(branch)
+        run(`git switch $branch`)
+    else
+        run(`git switch --orphan -c $branch`)
+    end
+end
+
 end
