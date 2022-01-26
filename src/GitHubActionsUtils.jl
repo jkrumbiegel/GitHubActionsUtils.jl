@@ -50,7 +50,8 @@ end
 push_git_branch(branch; remote = "origin") = run(`git push $origin $branch`)
 
 function set_github_actions_bot_as_git_user()
-    run(`git config --local user.email 41898282+github-actions[bot]@users.noreply.github.com`)
+    bot_address = "41898282+github-actions[bot]@users.noreply.github.com"
+    run(`git config --local user.email $bot_address`)
     run(`git config --local user.name "github-actions"`)
 end
 
