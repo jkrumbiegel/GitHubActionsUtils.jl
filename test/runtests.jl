@@ -1,7 +1,7 @@
 using GitHubActionsUtils
 using Test
 
-using FileIO
+using Luxor
 
 @testset "GitHubActionsUtils.jl" begin
     @show GitHubActionsUtils.is_github_actions()
@@ -27,7 +27,7 @@ using FileIO
         GitHubActionsUtils.switch_to_or_create_branch(image_branch_name; orphan = true)
 
         image_path = "image.png"
-        save(image_path, rand(100, 100))
+        @png juliacircles() 400 400 image_path
 
         run(`git add -A`)
         run(`git commit -m "create testimages"`)
