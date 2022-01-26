@@ -35,11 +35,12 @@ end
 
 is_git_branch(branch) = success(`git show-ref refs/heads/$branch`)
 
-function make_or_switch_to_orphan_branch(branch)
+function switch_to_or_create_branch(branch; orphan = false)
     if is_git_branch(branch)
         run(`git switch $branch`)
     else
-        run(`git switch --orphan -c $branch`)
+        orph = orphan ? "--orphan" : []
+        run(`git switch $orph -c $branch`)
     end
 end
 
