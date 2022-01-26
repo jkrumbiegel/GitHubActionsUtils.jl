@@ -4,6 +4,10 @@ using Test
 using Luxor
 
 @testset "GitHubActionsUtils.jl" begin
+
+    # move up from the `test` folder to the main repo
+    cd("..")
+
     @show GitHubActionsUtils.is_github_actions()
     @show GitHubActionsUtils.event_name()
     @show GitHubActionsUtils.is_push()
