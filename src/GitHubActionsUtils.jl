@@ -33,10 +33,10 @@ function comment_on_pr(pr_id, comment)
     GitHub.create_comment(repository(), pr_id; auth = auth(), params = :body => comment)
 end
 
-is_git_branch(branch) = success(`git show-ref refs/heads/$branch`)
+is_local_git_branch(branch) = success(`git show-ref refs/heads/$branch`)
 
 function switch_to_or_create_branch(branch; orphan = false)
-    if is_git_branch(branch)
+    if is_local_git_branch(branch)
         run(`git switch $branch`)
     else
         if orphan
@@ -45,6 +45,13 @@ function switch_to_or_create_branch(branch; orphan = false)
             run(`git switch -c $branch`)
         end
     end
+end
+
+push_git_branch(branch; remote = "origin") = run(`git push $origin $branch`)
+
+function set_github_actions_bot_as_git_user()
+    run(`git config --local user.email 41898282+github-actions[bot]@users.noreply.github.com`)
+    run(`git config --local user.name "github-actions"`)
 end
 
 end

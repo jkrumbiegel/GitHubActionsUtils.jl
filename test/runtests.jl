@@ -1,6 +1,8 @@
 using GitHubActionsUtils
 using Test
 
+using FileIO
+
 @testset "GitHubActionsUtils.jl" begin
     @show GitHubActionsUtils.is_github_actions()
     @show GitHubActionsUtils.event_name()
@@ -18,9 +20,39 @@ using Test
 
     if GitHubActionsUtils.is_pull_request()
         pr_number = GitHubActionsUtils.pull_request_number()
+
+        image_branch_name = "pr$(pr_number)-test-images"
+
+        GitHubActionsUtils.set_github_actions_bot_as_git_user()
+        GitHubActionsUtils.switch_to_or_create_branch(image_branch_name; orphan = true)
+
+        image_path = "image.png"
+        save(image_path, rand(100, 100))
+
+        run(`git add -A`)
+        run(`git commit -m "create testimages"`)
+
+        GitHubActionsUtils.push_git_branch(image_branch_name)
+
+        commit_hash = chomp(read(`git rev-parse HEAD`, String))
+
+        image_url = string(
+            "https://raw.githubusercontent.com/",
+            GitHubActionsUtils.repository(),
+            "/",
+            commit_hash,
+            "/",
+            image_path
+        )
+
         GitHubActionsUtils.comment_on_pr(
             pr_number,
-            "This comment is auto-generated from a CI run with version $VERSION."
+            """
+            This comment is auto-generated from a CI run with version $VERSION.
+
+            Here's an image:
+            ![an image]($image_url)
+            """
         )
     end
 end
