@@ -39,8 +39,11 @@ function switch_to_or_create_branch(branch; orphan = false)
     if is_git_branch(branch)
         run(`git switch $branch`)
     else
-        orph = orphan ? "--orphan" : []
-        run(`git switch $orph -c $branch`)
+        if orphan
+            run(`git switch --orphan $branch`)
+        else
+            run(`git switch -c $branch`)
+        end
     end
 end
 
