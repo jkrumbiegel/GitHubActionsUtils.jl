@@ -19,6 +19,7 @@ tag_name() = is_tag() ? match(r"^refs/tags/(.*)", github_ref())[1] : nothing
 pull_request_number() = is_pull_request() ? parse(Int, match(r"^refs/pull/(\d+)/.*", github_ref())[1]) : nothing
 pull_request_source() = is_pull_request() ? head_ref() : nothing
 repository() = something(get_env("GITHUB_REPOSITORY"))
+this_sha() = something(get_env("GITHUB_SHA"))
 
 const _auth = Ref{Any}()
 
@@ -53,6 +54,23 @@ function set_github_actions_bot_as_git_user()
     bot_address = "41898282+github-actions[bot]@users.noreply.github.com"
     run(`git config --local user.email $bot_address`)
     run(`git config --local user.name "github-actions"`)
+end
+
+"""
+Creates a commit status with one of the status options `:error`, `:failure`, `:pending` or `:success`.
+"""
+function create_commit_status(; status::Symbol, target_url::AbstractString, description::AbstractString, context::AbstractString)
+    status_str = status in (:error, :failure, :pending, :success) ? string(status) : error("Invalid status $status")
+    GitHub.create_status(
+        repository(),
+        this_sha(),
+        params = Dict(
+            :status => status_str,
+            :target_url => target_url,
+            :description => description,
+            :context => context
+        )
+    )
 end
 
 end

@@ -58,5 +58,12 @@ using Luxor
             ![an image]($image_url)
             """
         )
+
+        GitHubActionsUtils.create_commit_status(
+            status = :success,
+            target_url = "https://github.com",
+            description = "This is a commit status created in the CI run.",
+            context = "CI"
+        )
     end
 end
