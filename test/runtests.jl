@@ -36,7 +36,7 @@ using Luxor
         run(`git add -A`)
         run(`git commit -m "create testimages"`)
 
-        GitHubActionsUtils.push_git_branch(image_branch_name)
+        run(`git push -f origin $image_branch_name`)
 
         commit_hash = chomp(read(`git rev-parse HEAD`, String))
 
