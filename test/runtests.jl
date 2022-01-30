@@ -60,7 +60,7 @@ using Luxor
         )
 
         GitHubActionsUtils.create_commit_status(
-            status = :success,
+            state = :success,
             target_url = "https://github.com",
             description = "This is a commit status created in the CI run.",
             context = "CI"
