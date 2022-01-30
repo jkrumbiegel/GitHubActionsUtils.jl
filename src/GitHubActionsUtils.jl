@@ -19,7 +19,7 @@ tag_name() = is_tag() ? match(r"^refs/tags/(.*)", github_ref())[1] : nothing
 pull_request_number() = is_pull_request() ? parse(Int, match(r"^refs/pull/(\d+)/.*", github_ref())[1]) : nothing
 pull_request_source() = is_pull_request() ? head_ref() : nothing
 repository() = something(get_env("GITHUB_REPOSITORY"))
-this_sha() = something(get_env("GITHUB_SHA"))
+trigger_sha() = something(get_env("GITHUB_SHA"))
 
 const _auth = Ref{Any}()
 
@@ -63,7 +63,7 @@ function create_commit_status(; status::Symbol, target_url::AbstractString, desc
     status_str = status in (:error, :failure, :pending, :success) ? string(status) : error("Invalid status $status")
     GitHub.create_status(
         repository(),
-        this_sha(),
+        trigger_sha(),
         params = Dict(
             :status => status_str,
             :target_url => target_url,
