@@ -36,7 +36,7 @@ using Luxor
         run(`git add -A`)
         run(`git commit -m "create testimages"`)
 
-        GitHubActionsUtils.push_git_branch(image_branch_name)
+        run(`git push -f origin $image_branch_name`)
 
         commit_hash = chomp(read(`git rev-parse HEAD`, String))
 
@@ -57,6 +57,13 @@ using Luxor
             Here's an image:
             ![an image]($image_url)
             """
+        )
+
+        GitHubActionsUtils.create_commit_status(
+            state = :success,
+            target_url = "https://github.com",
+            description = "This is a commit status created in the CI run.",
+            context = "CI"
         )
     end
 end
