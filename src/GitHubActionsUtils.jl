@@ -63,7 +63,8 @@ function create_commit_status(; status::Symbol, target_url::AbstractString, desc
     status_str = status in (:error, :failure, :pending, :success) ? string(status) : error("Invalid status $status")
     GitHub.create_status(
         repository(),
-        trigger_sha(),
+        trigger_sha();
+        auth = auth(),
         params = Dict(
             :status => status_str,
             :target_url => target_url,
